@@ -14,7 +14,15 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "role_id ") // foreign key
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "role_id",
+            nullable = false,
+            foreignKey = @ForeignKey(
+                    name = "fk_users_role",
+                    options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
+            )
+    )
     private Long role_id;
 
     @Column(name = "username", length = 50, nullable = false, unique = true)

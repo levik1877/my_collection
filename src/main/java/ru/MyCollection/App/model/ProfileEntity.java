@@ -14,7 +14,15 @@ public class ProfileEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id") // foreign key
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(
+                    name = "fk_profile_user",
+                    options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
+            )
+    )
     private Long userId;
 
     @Column(name = "public_name", length = 255, nullable = false)

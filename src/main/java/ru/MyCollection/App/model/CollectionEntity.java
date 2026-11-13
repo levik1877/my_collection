@@ -14,7 +14,15 @@ public class CollectionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "owner_user_id") // foreign key
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "owner_user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(
+                    name = "fk_collection_user",
+                    options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
+            )
+    )
     private Long ownerUserId;
 
     @Column(name = "name", length = 255, nullable = false)
