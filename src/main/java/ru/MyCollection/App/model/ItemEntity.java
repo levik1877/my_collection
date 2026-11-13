@@ -1,6 +1,7 @@
 package ru.MyCollection.App.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.OffsetDateTime;
 
@@ -13,31 +14,32 @@ public class ItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "collection_id")
+    @Column(name = "collection_id") // foreign key
     private Long collectionId;
 
-    @Column(name = "owner_user_id")
+    @Column(name = "owner_user_id") // foreign key
     private Long ownerUserId;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 255, nullable = false)
     private String name;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "visibility")
+    @Column(name = "visibility") // ENUM
     private String visibility;
 
-    @Column(name = "status")
+    @Column(name = "status") // ENUM
     private String status;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", nullable = false)
+    @ColumnDefault("false")
     private Boolean isDeleted;
 
     public ItemEntity() {

@@ -1,6 +1,7 @@
 package ru.MyCollection.App.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
@@ -13,19 +14,20 @@ public class ProfileEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id") // foreign key
     private Long userId;
 
-    @Column(name = "public_name")
+    @Column(name = "public_name", length = 255, nullable = false)
     private String publicName;
 
-    @Column(name = "avatar_file_id")
+    @Column(name = "avatar_file_id") // foreign key
     private Long avatarFileId;
 
-    @Column(name = "country")
+    @Column(name = "country") // foreign key
     private String country;
 
-    @Column(name = "reputation")
+    @Column(name = "reputation", nullable = false)
+    @ColumnDefault("0")
     private Integer reputation;
 
     @Column(name = "description")
@@ -34,7 +36,8 @@ public class ProfileEntity {
     @Column(name = "update_at")
     private LocalDate updateAt;
 
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", nullable = false)
+    @ColumnDefault("false")
     private Boolean isDeleted;
 
     public ProfileEntity() {

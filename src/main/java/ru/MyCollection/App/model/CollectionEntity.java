@@ -1,6 +1,7 @@
 package ru.MyCollection.App.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
@@ -13,31 +14,29 @@ public class CollectionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "owner_user_id")
+    @Column(name = "owner_user_id") // foreign key
     private Long ownerUserId;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 255, nullable = false)
     private String name;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "cover_file_id")
+    @Column(name = "cover_file_id") // foreign key
     private Long coverFileId;
 
-    @Column(name = "visibility")
+    @Column(name = "visibility") // ENUM
     private String visibility;
 
-    @Column(name = "status")
-    private String status;
-
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
     @Column(name = "updated_at")
     private LocalDate updatedAt;
 
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", nullable = false)
+    @ColumnDefault("false")
     private Boolean isDeleted;
 
     public CollectionEntity() {
@@ -50,7 +49,6 @@ public class CollectionEntity {
             String description,
             Long coverFileId,
             String visibility,
-            String status,
             LocalDate createdAt,
             LocalDate updatedAt,
             Boolean isDeleted
@@ -61,7 +59,6 @@ public class CollectionEntity {
         this.description = description;
         this.coverFileId = coverFileId;
         this.visibility = visibility;
-        this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.isDeleted = isDeleted;
@@ -113,14 +110,6 @@ public class CollectionEntity {
 
     public void setVisibility(String visibility) {
         this.visibility = visibility;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public LocalDate getCreatedAt() {
