@@ -2,6 +2,8 @@ package ru.MyCollection.App.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import ru.MyCollection.App.model.entityEnums.ItemStatus;
+import ru.MyCollection.App.model.entityEnums.VisibilityStatus;
 
 import java.time.OffsetDateTime;
 
@@ -14,11 +16,27 @@ public class ItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "collection_id") // foreign key
-    private Long collectionId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "collection_id",
+            nullable = false,
+            foreignKey = @ForeignKey(
+                    name = "fk_collection_item",
+                    options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
+            )
+    )
+    private CollectionEntity collectionId;
 
-    @Column(name = "owner_user_id") // foreign key
-    private Long ownerUserId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "owner_user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(
+                    name = "fk_item_user",
+                    options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
+            )
+    )
+    private UserEntity ownerUserId;
 
     @Column(name = "name", length = 255, nullable = false)
     private String name;
@@ -26,11 +44,15 @@ public class ItemEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "visibility") // ENUM
-    private String visibility;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "visibility", nullable = false)
+    @ColumnDefault("'PUBLIC'")
+    private VisibilityStatus visibility = VisibilityStatus.PUBLIC;
 
-    @Column(name = "status") // ENUM
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @ColumnDefault("'PENDING'")
+    private ItemStatus status = ItemStatus.PENDING;
 
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
@@ -40,19 +62,19 @@ public class ItemEntity {
 
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault("false")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     public ItemEntity() {
     }
 
     public ItemEntity(
             Long id,
-            Long collectionId,
-            Long ownerUserId,
+            CollectionEntity collectionId,
+            UserEntity ownerUserId,
             String name,
             String description,
-            String visibility,
-            String status,
+            VisibilityStatus visibility,
+            ItemStatus status,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             Boolean isDeleted
@@ -77,19 +99,19 @@ public class ItemEntity {
         this.id = id;
     }
 
-    public Long getCollectionId() {
+    public CollectionEntity getCollectionId() {
         return collectionId;
     }
 
-    public void setCollectionId(Long collectionId) {
+    public void setCollectionId(CollectionEntity collectionId) {
         this.collectionId = collectionId;
     }
 
-    public Long getOwnerUserId() {
+    public UserEntity getOwnerUserId() {
         return ownerUserId;
     }
 
-    public void setOwnerUserId(Long ownerUserId) {
+    public void setOwnerUserId(UserEntity ownerUserId) {
         this.ownerUserId = ownerUserId;
     }
 
@@ -109,19 +131,19 @@ public class ItemEntity {
         this.description = description;
     }
 
-    public String getVisibility() {
+    public VisibilityStatus getVisibility() {
         return visibility;
     }
 
-    public void setVisibility(String visibility) {
+    public void setVisibility(VisibilityStatus visibility) {
         this.visibility = visibility;
     }
 
-    public String getStatus() {
+    public ItemStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ItemStatus status) {
         this.status = status;
     }
 

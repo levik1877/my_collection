@@ -18,7 +18,7 @@ public class RoleEntity {
 
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault("false")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     public RoleEntity() {}
 

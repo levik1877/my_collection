@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.MyCollection.App.dto.User;
 import ru.MyCollection.App.service.UserService;
 
 import java.util.List;
@@ -22,9 +21,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers() {
-        log.info("Called method getAllUsers");
-        return ResponseEntity.status(200).body(userService.findAllUsers());
-    }
+//    @GetMapping()
+//    public ResponseEntity<List<User>> getAllUsers() {
+//        log.info("Called method getAllUsers");
+//        return ResponseEntity.status(200).body(userService.findAllUsers());
+//    }
 }

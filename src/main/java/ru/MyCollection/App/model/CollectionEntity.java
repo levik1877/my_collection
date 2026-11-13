@@ -2,6 +2,7 @@ package ru.MyCollection.App.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import ru.MyCollection.App.model.entityEnums.VisibilityStatus;
 
 import java.time.LocalDate;
 
@@ -23,7 +24,7 @@ public class CollectionEntity {
                     options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
             )
     )
-    private Long ownerUserId;
+    private UserEntity ownerUserId;
 
     @Column(name = "name", length = 255, nullable = false)
     private String name;
@@ -34,8 +35,10 @@ public class CollectionEntity {
     @Column(name = "cover_file_id") // foreign key
     private Long coverFileId;
 
-    @Column(name = "visibility") // ENUM
-    private String visibility;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "visibility", nullable = false)
+    @ColumnDefault("'PUBLIC'")
+    private VisibilityStatus visibility = VisibilityStatus.PUBLIC;
 
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
@@ -45,18 +48,18 @@ public class CollectionEntity {
 
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault("false")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     public CollectionEntity() {
     }
 
     public CollectionEntity(
             Long id,
-            Long ownerUserId,
+            UserEntity ownerUserId,
             String name,
             String description,
             Long coverFileId,
-            String visibility,
+            VisibilityStatus visibility,
             LocalDate createdAt,
             LocalDate updatedAt,
             Boolean isDeleted
@@ -80,11 +83,11 @@ public class CollectionEntity {
         this.id = id;
     }
 
-    public Long getOwnerUserId() {
+    public UserEntity getOwnerUserId() {
         return ownerUserId;
     }
 
-    public void setOwnerUserId(Long ownerUserId) {
+    public void setOwnerUserId(UserEntity ownerUserId) {
         this.ownerUserId = ownerUserId;
     }
 
@@ -112,11 +115,11 @@ public class CollectionEntity {
         this.coverFileId = coverFileId;
     }
 
-    public String getVisibility() {
+    public VisibilityStatus getVisibility() {
         return visibility;
     }
 
-    public void setVisibility(String visibility) {
+    public void setVisibility(VisibilityStatus visibility) {
         this.visibility = visibility;
     }
 

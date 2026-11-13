@@ -23,7 +23,7 @@ public class UserEntity {
                     options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
             )
     )
-    private Long role_id;
+    private RoleEntity role_id;
 
     @Column(name = "username", length = 50, nullable = false, unique = true)
     private String username;
@@ -48,12 +48,12 @@ public class UserEntity {
 
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault("false")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     public UserEntity() {}
     public UserEntity(
             Long id,
-            Long role_id,
+            RoleEntity role_id,
             String username,
             String passwordHash,
             String email,
@@ -83,11 +83,11 @@ public class UserEntity {
         this.id = id;
     }
 
-    public Long getRole_id() {
+    public RoleEntity getRole_id() {
         return role_id;
     }
 
-    public void setRole_id(Long role_id) {
+    public void setRole_id(RoleEntity role_id) {
         this.role_id = role_id;
     }
 

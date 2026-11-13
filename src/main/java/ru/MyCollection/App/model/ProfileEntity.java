@@ -23,7 +23,7 @@ public class ProfileEntity {
                     options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
             )
     )
-    private Long userId;
+    private UserEntity userId;
 
     @Column(name = "public_name", length = 255, nullable = false)
     private String publicName;
@@ -36,7 +36,7 @@ public class ProfileEntity {
 
     @Column(name = "reputation", nullable = false)
     @ColumnDefault("0")
-    private Integer reputation;
+    private Integer reputation = 0;
 
     @Column(name = "description")
     private String description;
@@ -46,14 +46,14 @@ public class ProfileEntity {
 
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault("false")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     public ProfileEntity() {
     }
 
     public ProfileEntity(
             Long id,
-            Long userId,
+            UserEntity userId,
             String publicName,
             Long avatarFileId,
             String country,
@@ -81,11 +81,11 @@ public class ProfileEntity {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public UserEntity getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(UserEntity userId) {
         this.userId = userId;
     }
 
