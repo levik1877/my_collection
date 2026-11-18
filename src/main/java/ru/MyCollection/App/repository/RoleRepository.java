@@ -1,7 +1,7 @@
 package ru.MyCollection.App.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.MyCollection.App.model.UserEntity;
+import ru.MyCollection.App.model.RoleEntity;
 
-public interface RoleRepository extends JpaRepository<UserEntity, Long> {
+public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 }

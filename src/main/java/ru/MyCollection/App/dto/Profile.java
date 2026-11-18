@@ -1,10 +1,12 @@
 package ru.MyCollection.App.dto;
 
+import ru.MyCollection.App.model.UserEntity;
+
 import java.time.LocalDate;
 
 public record Profile(
         Long id,
-        Long userId,
+        UserEntity userId,
         String publicName,
         Long avatarFileId,
         String country,
