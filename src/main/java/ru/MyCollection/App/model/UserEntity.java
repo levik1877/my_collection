@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Table(name = "\"user\"")
 @Entity

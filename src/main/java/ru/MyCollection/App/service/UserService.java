@@ -5,6 +5,7 @@ import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.MyCollection.App.dto.User;
+import ru.MyCollection.App.dto.UserToCreate;
 import ru.MyCollection.App.model.UserEntity;
 import ru.MyCollection.App.repository.UserRepository;
 
@@ -16,9 +17,12 @@ import java.util.Locale;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository repository;
+    private final RoleService roleService;
 
-    public UserService(UserRepository repository) {
+
+    public UserService(UserRepository repository, RoleService roleService) {
         this.repository = repository;
+        this.roleService = roleService;
     }
 
     public List<User> findAllUsers() {
@@ -35,13 +39,9 @@ public class UserService {
         return toDto(userEntity);
     }
 
-    @Transactional
     public User createUser(
-            User userToCreate
+            UserToCreate userToCreate
     ) {
-        if (userToCreate.id() != null) {
-            throw new IllegalArgumentException("id should be empty");
-        }
         if (repository.findByUsername(userToCreate.username()).isEmpty()) {
             throw new IllegalArgumentException("username = " + userToCreate.username() + " is already used");
         }
@@ -51,21 +51,20 @@ public class UserService {
 
         var entityToSave = new UserEntity(
                 null,
-                userToCreate.role_id(),
+                roleService.getRoleById(2L),
                 userToCreate.username(),
                 userToCreate.passwordHash(),
                 userToCreate.email(),
-                userToCreate.emailVerifiedAt(),
-                userToCreate.createdAt(),
-                userToCreate.updateAt(),
-                userToCreate.lastLoginAt(),
+                null,
+                LocalDate.now(),
+                null,
+                LocalDate.now(),
                 null
         );
 
         return toDto(repository.save(entityToSave));
     }
 
-    @Transactional
     public User updateUserById(
             Long id,
             User userToUpdate

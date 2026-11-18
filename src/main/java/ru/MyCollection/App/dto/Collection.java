@@ -1,11 +1,13 @@
 package ru.MyCollection.App.dto;
 
+import ru.MyCollection.App.model.UserEntity;
+
 import java.time.LocalDate;
 import ru.MyCollection.App.model.entityEnums.VisibilityStatus;
 
 public record Collection(
         Long id,
-        Long ownerUserId,
+        UserEntity ownerUserId,
         String name,
         String description,
         Long coverFileId,
