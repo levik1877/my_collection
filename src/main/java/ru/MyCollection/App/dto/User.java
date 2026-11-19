@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 public record User(
         Long id,
-        RoleEntity role_id,
         String username,
         String passwordHash,
         String email,

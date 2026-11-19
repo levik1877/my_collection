@@ -22,27 +22,27 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers() {
-        log.info("Called method getAllUsers");
-        return ResponseEntity.status(200).body(userService.findAllUsers());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(
-            @PathVariable("id") Long id
-    ) {
-        log.info("Called getUserById: id = " + id);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(userService.getUserById(id));
-    }
-
-    @PostMapping()
-    public ResponseEntity<User> createUser(
-        @RequestBody UserToCreate userToCreate
-    ) {
-        log.info("Called method createUser");
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userService.createUser(userToCreate));
-    }
+//    @GetMapping()
+//    public ResponseEntity<List<User>> getAllUsers() {
+//        log.info("Called method getAllUsers");
+//        return ResponseEntity.status(200).body(userService.findAllUsers());
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<User> getUserById(
+//            @PathVariable("id") Long id
+//    ) {
+//        log.info("Called getUserById: id = " + id);
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(userService.getUserById(id));
+//    }
+//
+//    @PostMapping()
+//    public ResponseEntity<User> createUser(
+//        @RequestBody UserToCreate userToCreate
+//    ) {
+//        log.info("Called method createUser");
+//        return ResponseEntity.status(HttpStatus.CREATED)
+//                .body(userService.createUser(userToCreate));
+//    }
 }

@@ -1,13 +1,16 @@
 package ru.MyCollection.App.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 
 @Table(name = "\"user\"")
 @Entity
+@Data
 public class UserEntity {
 
     @Id
@@ -15,16 +18,13 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(
-            name = "role_id",
-            nullable = false,
-            foreignKey = @ForeignKey(
-                    name = "fk_users_role",
-                    options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
-            )
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private RoleEntity role_id;
+    private Collection<RoleEntity> roles;
 
     @Column(name = "username", length = 50, nullable = false, unique = true)
     private String username;
@@ -50,110 +50,4 @@ public class UserEntity {
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault("false")
     private Boolean isDeleted = false;
-
-    public UserEntity() {}
-    public UserEntity(
-            Long id,
-            RoleEntity role_id,
-            String username,
-            String passwordHash,
-            String email,
-            LocalDate emailVerifiedAt,
-            LocalDate createdAt,
-            LocalDate updateAt,
-            LocalDate lastLoginAt,
-            Boolean isDeleted
-    ) {
-        this.id = id;
-        this.role_id = role_id;
-        this.username = username;
-        this.passwordHash = passwordHash;
-        this.email = email;
-        this.emailVerifiedAt = emailVerifiedAt;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
-        this.lastLoginAt = lastLoginAt;
-        this.isDeleted = isDeleted;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public RoleEntity getRole_id() {
-        return role_id;
-    }
-
-    public void setRole_id(RoleEntity role_id) {
-        this.role_id = role_id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDate getEmailVerifiedAt() {
-        return emailVerifiedAt;
-    }
-
-    public void setEmailVerifiedAt(LocalDate emailVerifiedAt) {
-        this.emailVerifiedAt = emailVerifiedAt;
-    }
-
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDate getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(LocalDate updateAt) {
-        this.updateAt = updateAt;
-    }
-
-    public LocalDate getLastLoginAt() {
-        return lastLoginAt;
-    }
-
-    public void setLastLoginAt(LocalDate lastLoginAt) {
-        this.lastLoginAt = lastLoginAt;
-    }
-
-    public Boolean getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
 }
