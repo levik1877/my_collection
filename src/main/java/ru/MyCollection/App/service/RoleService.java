@@ -25,11 +25,19 @@ public class RoleService {
     public RoleEntity getRoleById(
             Long id
     ) {
-        RoleEntity roleEntity = repository.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Not found user by id = " + id
+                        "Not found role by id = " + id
                 ));
-        return roleEntity;
+    }
+
+    public RoleEntity getRoleByName(
+            String name
+    ) {
+        return repository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Not found role by name = " + name
+                ));
     }
 
     private Role toDto(
