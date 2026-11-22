@@ -1,17 +1,10 @@
 package ru.MyCollection.App.service;
 
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.MyCollection.App.dto.User;
-import ru.MyCollection.App.dto.UserToCreate;
+import ru.MyCollection.App.dto.UserDto;
 import ru.MyCollection.App.model.UserEntity;
 import ru.MyCollection.App.repository.UserRepository;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Locale;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,6 +15,7 @@ public class UserService {
     public UserService(UserRepository repository, RoleService roleService) {
         this.repository = repository;
     }
+
 
 //    public List<User> findAllUsers() {
 //        return repository.findAll().stream().map(this::toDto).toList();
@@ -108,19 +102,19 @@ public class UserService {
 //        return toDto(repository.save(userEntity));
 //    }
 //
-//    private User toDto(
-//            UserEntity userEntity
-//    ) {
-//        return new User(
-//                userEntity.getId(),
-//                userEntity.getUsername(),
-//                userEntity.getPasswordHash(),
-//                userEntity.getEmail(),
-//                userEntity.getEmailVerifiedAt(),
-//                userEntity.getCreatedAt(),
-//                userEntity.getUpdateAt(),
-//                userEntity.getLastLoginAt(),
-//                userEntity.getIsDeleted()
-//        );
-//    }
+    public UserDto toDto(
+            UserEntity userEntity
+    ) {
+        return new UserDto(
+                userEntity.getId(),
+                userEntity.getUsername(),
+                userEntity.getPasswordHash(),
+                userEntity.getEmail(),
+                userEntity.getEmailVerifiedAt(),
+                userEntity.getCreatedAt(),
+                userEntity.getUpdateAt(),
+                userEntity.getLastLoginAt(),
+                userEntity.getIsDeleted()
+        );
+    }
 }

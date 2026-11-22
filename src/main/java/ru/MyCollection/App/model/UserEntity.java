@@ -1,7 +1,9 @@
 package ru.MyCollection.App.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
@@ -11,6 +13,8 @@ import java.util.Collection;
 @Table(name = "\"user\"")
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
@@ -50,4 +54,5 @@ public class UserEntity {
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault("false")
     private Boolean isDeleted = false;
+
 }

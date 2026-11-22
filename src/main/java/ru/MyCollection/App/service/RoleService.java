@@ -3,7 +3,7 @@ package ru.MyCollection.App.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.MyCollection.App.dto.Role;
+import ru.MyCollection.App.dto.RoleDto;
 import ru.MyCollection.App.model.RoleEntity;
 import ru.MyCollection.App.repository.RoleRepository;
 
@@ -18,7 +18,7 @@ public class RoleService {
         this.repository = repository;
     }
 
-    public List<Role> findAllRoles() {
+    public List<RoleDto> findAllRoles() {
         return repository.findAll().stream().map(this::toDto).toList();
     }
 
@@ -40,10 +40,10 @@ public class RoleService {
                 ));
     }
 
-    private Role toDto(
+    private RoleDto toDto(
             RoleEntity roleEntity
     ) {
-        return new Role(
+        return new RoleDto(
                 roleEntity.getId(),
                 roleEntity.getName(),
                 roleEntity.getIsDeleted()
