@@ -1,11 +1,8 @@
 package ru.MyCollection.App.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.MyCollection.App.model.RoleEntity;
-
 import java.time.LocalDate;
 
-public record User(
+public record UserDto(
         Long id,
         String username,
         String passwordHash,

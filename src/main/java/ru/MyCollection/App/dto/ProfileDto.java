@@ -4,7 +4,7 @@ import ru.MyCollection.App.model.UserEntity;
 
 import java.time.LocalDate;
 
-public record Profile(
+public record ProfileDto(
         Long id,
         UserEntity userId,
         String publicName,
