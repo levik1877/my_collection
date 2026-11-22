@@ -1,14 +1,19 @@
 package ru.MyCollection.App.exception;
 
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
+
 
 import java.time.LocalDateTime;
 
@@ -35,7 +40,8 @@ public class GlobalExceptionHandler {
             IllegalArgumentException.class,
             IllegalStateException.class,
             EntityNotFoundException.class,
-            AuthenticationException.class
+            AuthenticationException.class,
+            ResponseStatusException.class
     })
     public ResponseEntity<ErrorResponseDto> handleBadRequest(
             Exception e
@@ -49,5 +55,24 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
+    }
+
+    @ExceptionHandler(exception = {
+            BadCredentialsException.class,
+            ExpiredJwtException.class,
+            SignatureException.class
+    })
+    public ResponseEntity<ErrorResponseDto> handleUnauthorized(
+            Exception e
+    ) {
+        log.error("Handle unauthorized", e);
+
+        var errorDto = new ErrorResponseDto(
+                "Unauthorized",
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorDto);
     }
 }
