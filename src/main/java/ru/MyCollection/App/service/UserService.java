@@ -7,7 +7,7 @@ import ru.MyCollection.App.model.UserEntity;
 import ru.MyCollection.App.repository.UserRepository;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class UserService {
     private final UserRepository repository;
 

@@ -10,7 +10,7 @@ import ru.MyCollection.App.repository.RoleRepository;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class RoleService {
     private final RoleRepository repository;
 
