@@ -1,4 +1,4 @@
-package ru.MyCollection.App.exception;
+package ru.MyCollection.App.dto;
 
 import java.time.LocalDateTime;
 

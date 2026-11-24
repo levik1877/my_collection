@@ -13,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
+import ru.MyCollection.App.dto.ErrorResponseDto;
 
 
 import java.time.LocalDateTime;
@@ -55,24 +56,5 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
-    }
-
-    @ExceptionHandler(exception = {
-            BadCredentialsException.class,
-            ExpiredJwtException.class,
-            SignatureException.class
-    })
-    public ResponseEntity<ErrorResponseDto> handleUnauthorized(
-            Exception e
-    ) {
-        log.error("Handle unauthorized", e);
-
-        var errorDto = new ErrorResponseDto(
-                "Unauthorized",
-                e.getMessage(),
-                LocalDateTime.now()
-        );
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorDto);
     }
 }
