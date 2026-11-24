@@ -1,4 +1,4 @@
-package ru.MyCollection.App.auth;
+package ru.MyCollection.App.controller;
 
 
 import lombok.RequiredArgsConstructor;

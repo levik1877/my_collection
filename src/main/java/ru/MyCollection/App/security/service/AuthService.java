@@ -1,4 +1,4 @@
-package ru.MyCollection.App.auth;
+package ru.MyCollection.App.security.service;
 
 
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ru.MyCollection.App.dto.LoginRequestDto;
+import ru.MyCollection.App.dto.RegistrationUserDto;
+import ru.MyCollection.App.dto.TokenResponseDto;
 import ru.MyCollection.App.dto.UserDto;
+import ru.MyCollection.App.security.JwtTokenUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +23,8 @@ public class AuthService {
     @Lazy
     private final AuthenticationManager authenticationManager;
 
-    public TokenResponse authenticate(
-            LoginRequest authRequest
+    public TokenResponseDto authenticate(
+            LoginRequestDto authRequest
     ) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -30,7 +34,7 @@ public class AuthService {
         );
         UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = jwtTokenUtils.generateToken(userDetails);
-        return new TokenResponse(token);
+        return new TokenResponseDto(token);
     }
 
     public UserDto createNewUser(

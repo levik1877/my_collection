@@ -1,4 +1,4 @@
-package ru.MyCollection.App.auth;
+package ru.MyCollection.App.security.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -8,11 +8,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.MyCollection.App.dto.RegistrationUserDto;
 import ru.MyCollection.App.dto.UserDto;
 import ru.MyCollection.App.model.UserEntity;
 import ru.MyCollection.App.repository.UserRepository;
-import ru.MyCollection.App.service.RoleService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import ru.MyCollection.App.service.RoleService;
 
 import java.time.LocalDate;
 import java.util.List;

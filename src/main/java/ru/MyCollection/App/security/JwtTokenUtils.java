@@ -1,4 +1,4 @@
-package ru.MyCollection.App.auth;
+package ru.MyCollection.App.security;
 
 
 import io.jsonwebtoken.Claims;

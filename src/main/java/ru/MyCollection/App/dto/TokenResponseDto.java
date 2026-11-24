@@ -1,4 +1,4 @@
-package ru.MyCollection.App.auth;
+package ru.MyCollection.App.dto;
 
 
 import lombok.AllArgsConstructor;
@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class TokenResponse {
+public class TokenResponseDto {
     private String token;
 }

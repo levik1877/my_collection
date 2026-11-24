@@ -1,4 +1,4 @@
-package ru.MyCollection.App.config;
+package ru.MyCollection.App.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import ru.MyCollection.App.auth.CustomUserDetailsService;
-import ru.MyCollection.App.auth.JwtAuthenticationFilter;
+import ru.MyCollection.App.security.service.CustomUserDetailsService;
+import ru.MyCollection.App.security.filter.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity

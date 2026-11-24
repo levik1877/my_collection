@@ -1,4 +1,4 @@
-package ru.MyCollection.App.auth;
+package ru.MyCollection.App.security.filter;
 
 
 import jakarta.servlet.FilterChain;
@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.MyCollection.App.security.JwtTokenUtils;
 
 import java.io.IOException;
 import java.util.stream.Collectors;
