@@ -42,7 +42,7 @@ public class ItemEntity {
                     options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
             )
     )
-    private UserEntity ownerUserId;
+    private UserEntity user;
 
     @Column(name = "name", length = 255, nullable = false)
     private String name;

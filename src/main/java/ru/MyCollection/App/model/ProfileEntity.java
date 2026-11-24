@@ -29,16 +29,30 @@ public class ProfileEntity {
                     options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
             )
     )
-    private UserEntity userId;
+    private UserEntity owner;
 
     @Column(name = "public_name", length = 255, nullable = false)
     private String publicName;
 
-    @Column(name = "avatar_file_id") // foreign key
-    private Long avatarFileId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "avatar_file_id",
+            foreignKey = @ForeignKey(
+                    name = "fk_profile_avatar_file",
+                    options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
+            )
+    )
+    private UploadedFileEntity avatarFile;
 
-    @Column(name = "country") // foreign key
-    private String country;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "location_id",
+            foreignKey = @ForeignKey(
+                    name = "fk_profile_location",
+                    options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
+            )
+    )
+    private LocationEntity location;
 
     @Column(name = "reputation", nullable = false)
     @ColumnDefault("0")
