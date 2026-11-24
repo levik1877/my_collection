@@ -41,8 +41,6 @@ public class GlobalExceptionHandler {
             IllegalArgumentException.class,
             IllegalStateException.class,
             EntityNotFoundException.class,
-            AuthenticationException.class,
-            ResponseStatusException.class
     })
     public ResponseEntity<ErrorResponseDto> handleBadRequest(
             Exception e
@@ -56,5 +54,21 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponseDto> handleResponseStatusException(
+            ResponseStatusException e
+    ) {
+        var errorDto = new ErrorResponseDto(
+                "Request failed",
+                e.getReason(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity
+                .status(e.getStatusCode())
+                .headers(e.getHeaders())
+                .body(errorDto);
     }
 }

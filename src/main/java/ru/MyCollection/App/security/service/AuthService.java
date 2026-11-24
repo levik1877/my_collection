@@ -44,7 +44,7 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords are not equal");
         }
         if (userService.findByUsername(registrationUserDto.getUsername()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         }
         return userService.createNewUser(registrationUserDto);
     }
