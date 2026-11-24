@@ -3,15 +3,16 @@ package ru.MyCollection.App.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import ru.MyCollection.App.exception.ValidationErrorMessage;
 
 @Data
 public class RegistrationUserDto {
-    @NotBlank
+    @NotBlank(message = ValidationErrorMessage.NOT_EMPTY)
     private String username;
-    @NotBlank
+    @NotBlank(message = ValidationErrorMessage.NOT_EMPTY)
     private String password;
-    @NotBlank
+    @NotBlank(message = ValidationErrorMessage.NOT_EMPTY)
     private String confirmPassword;
-    @Email
+    @Email(message = ValidationErrorMessage.BAD_EMAIL)
     private String email;
 }
