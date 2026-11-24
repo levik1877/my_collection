@@ -1,11 +1,16 @@
 package ru.MyCollection.App.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
-public record ErrorResponseDto (
-    String message,
-    String detailedMessage,
-    LocalDateTime errorTime
-) {
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ErrorResponseDto {
+    String message;
+    String detailedMessage;
+    LocalDateTime errorTime;
 }
