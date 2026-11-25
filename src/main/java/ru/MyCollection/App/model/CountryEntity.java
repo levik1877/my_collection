@@ -18,8 +18,18 @@ public class CountryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 255, nullable = false)
+    @Column(name = "name", length = 255, nullable = false, unique = true)
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "icon_file_id",
+            foreignKey = @ForeignKey(
+                    name = "fk_country_icon_file",
+                    options = ForeignKeyOptions.CASCADE_UPDATE_RESTRICT_DELETE
+            )
+    )
+    private UploadedFileEntity iconFile;
 
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault("false")
