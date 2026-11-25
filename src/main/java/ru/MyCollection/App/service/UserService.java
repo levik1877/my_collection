@@ -1,114 +1,127 @@
 package ru.MyCollection.App.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.MyCollection.App.dto.UserDto;
+import ru.MyCollection.App.dto.UserWithPasswordDto;
 import ru.MyCollection.App.model.UserEntity;
 import ru.MyCollection.App.repository.UserRepository;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Service
 @Transactional
+@AllArgsConstructor
 public class UserService {
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-
-    public UserService(UserRepository repository, RoleService roleService) {
-        this.repository = repository;
+    @Transactional(readOnly = true)
+    public List<UserDto> findAllUsers() {
+        return repository.findAll().stream().map(this::toDto).toList();
     }
 
+    @Transactional(readOnly = true)
+    public UserDto getUserById(Long id) {
+        return toDto(getUser(id));
+    }
 
-//    public List<User> findAllUsers() {
-//        return repository.findAll().stream().map(this::toDto).toList();
-//    }
+    // getPasswordById
+    // setPasswordById нужно придумать как шифровать пароли перед отправкой на клиента
 
-//    public User getUserById(
-//            Long id
-//    ) {
-//        UserEntity userEntity = repository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException(
-//                        "Not found user by id = " + id
-//                ));
-//        return toDto(userEntity);
-//    }
-//
-//    public User createUser(
-//            UserToCreate userToCreate
-//    ) {
-//        if (repository.findByUsername(userToCreate.username()).isEmpty()) {
-//            throw new IllegalArgumentException("username = " + userToCreate.username() + " is already used");
-//        }
-//        if (repository.findByEmail(userToCreate.email()).isEmpty()) {
-//            throw new IllegalArgumentException("email = " + userToCreate.email() + " is already used");
-//        }
-//
-//        var entityToSave = new UserEntity(
-//                null,
-//                userToCreate.username(),
-//                userToCreate.passwordHash(),
-//                userToCreate.email(),
-//                null,
-//                LocalDate.now(),
-//                null,
-//                LocalDate.now(),
-//                null
-//        );
-//
-//        return toDto(repository.save(entityToSave));
-//    }
+    @Transactional
+    public UserDto createUser(UserWithPasswordDto userToCreate) {
+        if (repository.findByUsername(userToCreate.getUsername()).isEmpty()) {
+            throw new IllegalArgumentException("username = " + userToCreate.getUsername()+ " is already used");
+        }
+        if (repository.findByEmail(userToCreate.getEmail()).isEmpty()) {
+            throw new IllegalArgumentException("email = " + userToCreate.getEmail() + " is already used");
+        }
 
-//    public User updateUserById(
-//            Long id,
-//            User userToUpdate
-//    ) {
-//        var userEntity = repository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException(
-//                        "Not found user by id = " + id
-//                ));
-//
-//        if(userToUpdate.username().equals(userEntity.getUsername()) &&
-//                repository.findByUsername(userToUpdate.username()).isEmpty()
-//        ) {
-//            throw new IllegalArgumentException("username = " + userToUpdate.username() + " is already used");
-//        }
-//        if (userToUpdate.email().equals(userEntity.getEmail()) &&
-//                repository.findByEmail(userToUpdate.email()).isEmpty()) {
-//            throw new IllegalArgumentException("email = " + userToUpdate.email() + " is already used");
-//        }
-//
-//        var userToSave = new UserEntity(
-//                userEntity.getId(),
-//                userToUpdate.username(),
-//                userToUpdate.passwordHash(),
-//                userToUpdate.email(),
-//                userToUpdate.emailVerifiedAt(),
-//                userToUpdate.createdAt(),
-//                userToUpdate.updateAt(),
-//                userToUpdate.lastLoginAt(),
-//                userToUpdate.isDeleted()
-//        );
-//
-//        return toDto(repository.save(userToSave));
-//    }
-//
-//    @Transactional
-//    private User deleteUserById(Long id) {
-//        var userEntity = repository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException(
-//                        "Not found user by id = " + id
-//                ));
-//
-//        userEntity.setIsDeleted(true);
-//
-//        return toDto(repository.save(userEntity));
-//    }
-//
+        var entityToSave = new UserEntity(
+                null,
+                userToCreate.getRoles(), // вот эту хуйню надо проверять
+                userToCreate.getUsername(),
+                passwordEncoder.encode(userToCreate.getPassword()),
+                userToCreate.getEmail(),
+                null,
+                LocalDate.now(),
+                null,
+                LocalDate.now(),
+                false
+        );
+
+        return toDto(repository.save(entityToSave));
+    }
+
+    @Transactional
+    public UserDto updateUserById(
+            Long id,
+            UserDto userToUpdate
+    ) {
+        var userEntity = getUser(id);
+
+        if(userToUpdate.getUsername().equals(userEntity.getUsername()) &&
+                repository.findByUsername(userToUpdate.getUsername()).isEmpty()
+        ) {
+            throw new IllegalArgumentException("username = " + userToUpdate.getUsername() + " is already used");
+        }
+        if (userToUpdate.getEmail().equals(userEntity.getEmail()) &&
+                repository.findByEmail(userToUpdate.getEmail()).isEmpty()) {
+            throw new IllegalArgumentException("email = " + userToUpdate.getEmail() + " is already used");
+        }
+
+        var userToSave = new UserEntity(
+                userEntity.getId(),
+                userToUpdate.getRoles(), // И эту
+                userToUpdate.getUsername(),
+                userEntity.getPasswordHash(),
+                userToUpdate.getEmail(),
+                userToUpdate.getEmailVerifiedAt(),
+                userToUpdate.getCreatedAt(),
+                userToUpdate.getUpdateAt(),
+                userToUpdate.getLastLoginAt(),
+                userToUpdate.getIsDeleted()
+        );
+
+        return toDto(repository.save(userToSave));
+    }
+
+    @Transactional
+    public UserDto deleteUserById(Long id) {
+        var userEntity = getUser(id);
+        userEntity.setIsDeleted(true);
+        return toDto(repository.save(userEntity));
+    }
+
+    @Transactional
+    public UserDto fullDeleteUserById(Long id) {
+        var userEntity = getUser(id);
+        repository.delete(getUser(id));
+        return toDto(userEntity);
+    }
+
+    private UserEntity getUser(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id can't be null");
+        }
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Not found user by id = " + id
+                ));
+    }
+
     public UserDto toDto(
             UserEntity userEntity
     ) {
         return new UserDto(
                 userEntity.getId(),
+                userEntity.getRoles(),
                 userEntity.getUsername(),
-                userEntity.getPasswordHash(),
                 userEntity.getEmail(),
                 userEntity.getEmailVerifiedAt(),
                 userEntity.getCreatedAt(),

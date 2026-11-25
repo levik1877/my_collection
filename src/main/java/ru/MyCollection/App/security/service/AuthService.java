@@ -34,6 +34,7 @@ public class AuthService {
         );
         UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = jwtTokenUtils.generateToken(userDetails);
+        userService.setLastLoginDateUserByUsername(authRequest.getUsername());
         return new TokenResponseDto(token);
     }
 
@@ -42,9 +43,6 @@ public class AuthService {
     ) {
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getConfirmPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords are not equal");
-        }
-        if (userService.findByUsername(registrationUserDto.getUsername()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         }
         return userService.createNewUser(registrationUserDto);
     }

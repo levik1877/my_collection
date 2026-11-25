@@ -1,6 +1,7 @@
 package ru.MyCollection.App.security.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,19 +29,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-
-    public Optional<UserEntity> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UserEntity findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
+                "Not found user by username = " + username
+        ));
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "Not found user by username = " + username
-                ));
-
-
+        UserEntity userEntity = findByUsername(username);
         return new User(
                 userEntity.getUsername(),
                 userEntity.getPasswordHash(),
@@ -51,6 +48,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         );
     }
 
+    @Transactional
+    public UserDto setLastLoginDateUserByUsername(String username) {
+        var userEntity = findByUsername(username);
+        userEntity.setLastLoginAt(LocalDate.now());
+        return toUserDto(userEntity);
+    }
+
+    @Transactional
     public UserDto createNewUser(RegistrationUserDto registrationUserDto) {
         UserEntity userToSave = new UserEntity(
                 null,
@@ -64,7 +69,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 LocalDate.now(),
                 false
         );
-        userToSave.setRoles(List.of(roleService.getRoleByName("ROLE_USER")));
+        userToSave.setRoles(List.of(roleService.getRoleByName("ROLE_USER"))); // Когда будет подтверждение email не нужно выдавать роль user. Роль выдаётся после подтверждения email
         return toUserDto(userRepository.save(userToSave));
     }
 
@@ -73,8 +78,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     ) {
         return new UserDto(
                 userEntity.getId(),
+                userEntity.getRoles(),
                 userEntity.getUsername(),
-                userEntity.getPasswordHash(),
                 userEntity.getEmail(),
                 userEntity.getEmailVerifiedAt(),
                 userEntity.getCreatedAt(),
